@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct WaterAppApp: App {
+    
+    @StateObject private var appVM = AppViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView()
+                .environmentObject(appVM)
         }
     }
 }

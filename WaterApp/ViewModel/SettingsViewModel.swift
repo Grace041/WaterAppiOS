@@ -34,7 +34,7 @@ class SettingsViewModel: ObservableObject {
         profile.theme = theme
     }
     
-    func saveProfile() {
-        // TODO: Persist profile to UserDefaults or CoreData
-    }
+//    func saveProfile() {
+//        // TODO: Persist profile to UserDefaults or CoreData
+//    }
 }

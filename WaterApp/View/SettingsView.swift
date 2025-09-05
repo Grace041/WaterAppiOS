@@ -8,37 +8,38 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @StateObject private var settingsVM = SettingsViewModel()
+    //@StateObject private var settingsVM = SettingsViewModel()
+    @EnvironmentObject var appVM : AppViewModel
     
     let themes = ["Light", "Dark", "System"]
-    let frequencyOptions = [5, 10, 15, 30, 60]
+    let frequencyOptions = [1, 2, 3, 4, 5]
     
     var body: some View {
         VStack {
             NavigationView {
                 Form {
                     Section(header: Text("Profile")) {
-                        TextField("Name", text: $settingsVM.profile.name)
-                        TextField("Age", value: $settingsVM.profile.age, formatter: NumberFormatter())
+                        TextField("Name", text: $appVM.settingsVM.profile.name)
+                        TextField("Age", value: $appVM.settingsVM.profile.age, formatter: NumberFormatter())
                             .keyboardType(.numberPad)
                     }
 
                     Section(header: Text("Preferences")) {
-                        Toggle(isOn: $settingsVM.profile.notificationsEnabled) {
+                        Toggle(isOn: $appVM.settingsVM.profile.notificationsEnabled) {
                             Label("Enable Notifications", systemImage: "bell")
                         }
                         
-                        Picker("Notification Frequency", selection: $settingsVM.profile.notificationFrequency) {
+                        Picker("Notification Frequency", selection: $appVM.settingsVM.profile.notificationFrequency) {
                             ForEach(frequencyOptions, id: \.self) { freq in
-                                Text("\(freq) min")
+                                Text("\(freq) hour")
                             }
                         }
                         
-                        Stepper(value: $settingsVM.profile.dailyGoal, in: 100...20000, step: 100) {
-                            Label("Daily Water Goal: \(Int(settingsVM.profile.dailyGoal)) ml", systemImage: "drop.fill")
+                        Stepper(value: $appVM.settingsVM.profile.dailyGoal, in: 100...20000, step: 100) {
+                            Label("Daily Water Goal: \(Int(appVM.settingsVM.profile.dailyGoal)) ml", systemImage: "drop.fill")
                         }
                         
-                        Picker(selection: $settingsVM.profile.theme, label: Label("Theme", systemImage: "paintpalette")) {
+                        Picker(selection: $appVM.settingsVM.profile.theme, label: Label("Theme", systemImage: "paintpalette")) {
                             ForEach(themes, id: \.self) { theme in
                                 Text(theme)
                             }
@@ -85,5 +86,6 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
+            .environmentObject(AppViewModel())
     }
 }
