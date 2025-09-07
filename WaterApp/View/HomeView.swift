@@ -10,9 +10,9 @@ import SwiftUI
 struct HomeView: View {
     
 //    @EnvironmentObject var appVM : AppViewModel
-//    @State private var showCustomInput = false
-//    @State private var customAmount: String = ""
-//    @State private var isAdding: Bool = true
+    @State private var showCustomInput = false
+    @State private var customAmount: String = ""
+    @State private var isAdding: Bool = true
     
     @StateObject private var waterVM = WaterViewModel()
     
@@ -79,8 +79,8 @@ struct HomeView: View {
                         QuickAddButton(amount: 350, action: { waterVM.addWater(amount: 350) })
                         QuickAddButton(amount: 500, action: { waterVM.addWater(amount: 500) })
                         Button(action: {
-//                            isAdding = true
-//                            showCustomInput = true
+                            isAdding = true
+                            showCustomInput = true
                         }) {
                             Text("+ Custom")
                                 .font(.subheadline)
@@ -103,8 +103,8 @@ struct HomeView: View {
                                 .cornerRadius(10)
                         }
                         Button(action: {
-//                            isAdding = false
-//                            showCustomInput = true
+                            isAdding = false
+                            showCustomInput = true
                         }) {
                             Text("- Custom")
                                 .font(.subheadline)
@@ -143,9 +143,14 @@ struct HomeView: View {
             }
             
             .padding()
-//            .sheet(isPresented: $showCustomInput) {
-//                CustomInputView(isAdding: $isAdding, customAmount: $customAmount, showCustomInput: $showCustomInput)
-//                    .environmentObject(appVM)
+            .sheet(isPresented: $showCustomInput) {
+                CustomInputView(
+                    isAdding: $isAdding,
+                    customAmount: $customAmount,
+                    showCustomInput: $showCustomInput,
+                    waterVM: waterVM
+                )
+            }
 //            }
             .navigationBarHidden(true)
         }
@@ -170,29 +175,30 @@ struct QuickAddButton: View {
 }
 
 struct CustomInputView: View {
-    @EnvironmentObject var appVM: AppViewModel
     @Binding var isAdding: Bool
     @Binding var customAmount: String
     @Binding var showCustomInput: Bool
+    @ObservedObject var waterVM: WaterViewModel
     
     var body: some View {
         VStack(spacing: 20) {
             Text(isAdding ? "Add Custom Amount" : "Remove Custom Amount")
                 .font(.headline)
-                    
+                .padding(.top)
+            
             TextField("ml", text: $customAmount)
                 .keyboardType(.numberPad)
                 .padding()
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
-                .frame(width: 150)
-                    
+                .frame(width: 200)
+            
             Button(isAdding ? "Add" : "Remove") {
                 if let amount = Double(customAmount), amount > 0 {
                     if isAdding {
-                        appVM.waterVM.addWater(amount: amount)
+                        waterVM.addWater(amount: amount)
                     } else {
-                        appVM.waterVM.removeWater(amount: amount)
+                        waterVM.removeWater(amount: amount)
                     }
                 }
                 showCustomInput = false
@@ -203,7 +209,8 @@ struct CustomInputView: View {
             .background(isAdding ? Color.blue : Color.red)
             .foregroundColor(.white)
             .cornerRadius(12)
-                    
+            .disabled(customAmount.isEmpty || Double(customAmount) == nil)
+            
             Button("Cancel") {
                 showCustomInput = false
                 customAmount = ""
@@ -212,6 +219,7 @@ struct CustomInputView: View {
         }
         .padding()
         .presentationDetents([.height(250)])
+        .presentationDragIndicator(.visible)
     }
 }
 
