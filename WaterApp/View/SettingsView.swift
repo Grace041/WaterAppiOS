@@ -17,12 +17,25 @@ struct SettingsView: View {
         NavigationView {
             VStack {
                 Form {
-                    Section(header: Text("Profile")) {
-                        TextField("Name", text: $settingsVM.profile.name)
-                        TextField("Age", value: $settingsVM.profile.age, formatter: NumberFormatter())
-                            .keyboardType(.numberPad)
+                    HStack {
+                        Image(systemName: "person.circle.fill")
+                            .font(.system(size: 50))
+                            .foregroundColor(.gray)
+                                            
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Grace")
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                                
+                            Text("ID: 12345678")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                    .padding(.leading, 8)
+                                            
+                    Spacer()
                     }
-
+                                        .padding(.vertical, 12)
                     Section(header: Text("Preferences")) {
                         Toggle(isOn: $settingsVM.profile.notificationsEnabled) {
                             Label("Enable Notifications", systemImage: "bell")
@@ -62,31 +75,31 @@ struct SettingsView: View {
                 }
                 .navigationTitle("Settings")
                 
-//                HStack {
-//                    Spacer()
-//                    NavigationLink(destination: HomeView()) {
-//                        VStack {
-//                            Image(systemName: "house.fill")
-//                                .foregroundColor(.blue)
-//                            Text("Home")
-//                                .font(.caption)
-//                        }
-//                    }
-//                    Spacer()
-//                    
-//                    NavigationLink(destination: SettingsView()) {
-//                        VStack {
-//                            Image(systemName: "gearshape.fill")
-//                                .foregroundColor(.gray)
-//                            Text("Settings")
-//                                .font(.caption)
-//                        }
-//                    }
-//                    Spacer()
-//                }
-//                .padding()
-//                .background(Color(UIColor.systemGray6))
-//                .cornerRadius(20)
+                HStack {
+                    Spacer()
+                    NavigationLink(destination: HomeView()) {
+                        VStack {
+                            Image(systemName: "house.fill")
+                                .foregroundColor(.blue)
+                            Text("Home")
+                                .font(.caption)
+                        }
+                    }
+                    Spacer()
+                    
+                    NavigationLink(destination: SettingsView()) {
+                        VStack {
+                            Image(systemName: "gearshape.fill")
+                                .foregroundColor(.gray)
+                            Text("Settings")
+                                .font(.caption)
+                        }
+                    }
+                    Spacer()
+                }
+                .padding()
+                .background(Color(UIColor.systemGray6))
+                .cornerRadius(20)
             }
         }
         .navigationBarBackButtonHidden()
@@ -96,6 +109,6 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
-            .environmentObject(AppViewModel())
+            .environmentObject(WaterViewModel())
     }
 }

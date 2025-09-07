@@ -9,7 +9,6 @@ import SwiftUI
 
 struct HomeView: View {
     
-//    @EnvironmentObject var appVM : AppViewModel
     @State private var showCustomInput = false
     @State private var customAmount: String = ""
     @State private var isAdding: Bool = true
@@ -88,7 +87,7 @@ struct HomeView: View {
                         Button(action: {
                             waterVM.removeWater(amount: 250)
                         }) {
-                            Text("Remove 250ml")
+                            Text("-250 ml")
                                 .font(.subheadline)
                                 .padding()
                                 .frame(width: 150)
@@ -110,29 +109,29 @@ struct HomeView: View {
                 
                 Spacer()
                 
-//                HStack {
-//                    Spacer()
-//                    VStack {
-//                        Image(systemName: "house.fill")
-//                            .foregroundColor(.blue)
-//                        Text("Home")
-//                            .font(.caption)
-//                    }
-//                    Spacer()
-//                    
-//                    NavigationLink(destination: SettingsView()) {
-//                        VStack {
-//                            Image(systemName: "gearshape.fill")
-//                                .foregroundColor(.gray)
-//                            Text("Settings")
-//                                .font(.caption)
-//                        }
-//                    }
-//                    Spacer()
-//                }
-//                .padding()
-//                .background(Color(UIColor.systemGray6))
-//                .cornerRadius(20)
+                HStack {
+                    Spacer()
+                    VStack {
+                        Image(systemName: "house.fill")
+                            .foregroundColor(.blue)
+                        Text("Home")
+                            .font(.caption)
+                    }
+                    Spacer()
+                    
+                    NavigationLink(destination: SettingsView()) {
+                        VStack {
+                            Image(systemName: "gearshape.fill")
+                                .foregroundColor(.gray)
+                            Text("Settings")
+                                .font(.caption)
+                        }
+                    }
+                    Spacer()
+                }
+                .padding()
+                .background(Color(UIColor.systemGray6))
+                .cornerRadius(20)
             }
             
             .padding()
@@ -144,11 +143,7 @@ struct HomeView: View {
                     waterVM: waterVM
                 )
             }
-//            }
             .navigationBarHidden(true)
-//            .onAppear{
-//                settingsVM.loadProfile()
-//            }
         }
         .navigationBarBackButtonHidden()
     }
@@ -170,54 +165,6 @@ struct QuickAddButton: View {
     }
 }
 
-struct CustomInputView: View {
-    @Binding var isAdding: Bool
-    @Binding var customAmount: String
-    @Binding var showCustomInput: Bool
-    @ObservedObject var waterVM: WaterViewModel
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Text(isAdding ? "Add Custom Amount" : "Remove Custom Amount")
-                .font(.headline)
-                .padding(.top)
-            
-            TextField("ml", text: $customAmount)
-                .keyboardType(.numberPad)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .frame(width: 200)
-            
-            Button(isAdding ? "Add" : "Remove") {
-                if let amount = Double(customAmount), amount > 0 {
-                    if isAdding {
-                        waterVM.addWater(amount: amount)
-                    } else {
-                        waterVM.removeWater(amount: amount)
-                    }
-                }
-                showCustomInput = false
-                customAmount = ""
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(isAdding ? Color.blue : Color.red)
-            .foregroundColor(.white)
-            .cornerRadius(12)
-            .disabled(customAmount.isEmpty || Double(customAmount) == nil)
-            
-            Button("Cancel") {
-                showCustomInput = false
-                customAmount = ""
-            }
-            .foregroundColor(.gray)
-        }
-        .padding()
-        .presentationDetents([.height(250)])
-        .presentationDragIndicator(.visible)
-    }
-}
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
