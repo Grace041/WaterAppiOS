@@ -9,14 +9,16 @@ import SwiftUI
 
 struct HomeView: View {
     
-    @EnvironmentObject var appVM : AppViewModel
-    @State private var showCustomInput = false
-    @State private var customAmount: String = ""
-    @State private var isAdding: Bool = true
+//    @EnvironmentObject var appVM : AppViewModel
+//    @State private var showCustomInput = false
+//    @State private var customAmount: String = ""
+//    @State private var isAdding: Bool = true
     
-    var progress: Double {
-        appVM.waterVM.progress
-    }
+    @StateObject private var waterVM = WaterViewModel()
+    
+//    var progress: Double {
+//        appVM.waterVM.progress
+//    }
     
     var body: some View {
         NavigationView {
@@ -41,40 +43,44 @@ struct HomeView: View {
                         .foregroundColor(Color.blue)
                     
                     Circle()
-                        .trim(from: 0.0, to: min(progress, 1.0))
+                        .trim(from: 0.0, to: min(waterVM.progress, 1.0))
                         .stroke(
                             AngularGradient(gradient: Gradient(colors: [.blue, .cyan]),
                                             center: .center),
                             style: StrokeStyle(lineWidth: 20, lineCap: .round)
                         )
                         .rotationEffect(.degrees(-90))
-                        .animation(.easeOut, value:progress)
+                        .animation(.easeOut, value: waterVM.progress)
                     
                     VStack {
                         Image(systemName: "drop.fill")
                             .font(.system(size: 40))
                             .foregroundColor(.blue)
-                        Text(String(format: "%.0fml / %.0fml", appVM.waterVM.currentIntake, appVM.waterVM.dailyGoal))
+                        Text("\(Int(waterVM.currentIntake)) ml / \(Int(waterVM.dailyGoal)) ml")
                             .font(.headline)
                     }
                 }
                 .frame(width: 220, height: 220)
                 
-                if appVM.settingsVM.profile.notificationsEnabled {
-                    Text("Next gentle reminder in \(appVM.settingsVM.profile.notificationFrequency / 60) hours")
-                        .foregroundColor(.gray)
-                        .font(.subheadline)
-                }
+//                if appVM.settingsVM.profile.notificationsEnabled {
+//                    Text("Next gentle reminder in \(appVM.settingsVM.profile.notificationFrequency / 60) hours")
+//                        .foregroundColor(.gray)
+//                        .font(.subheadline)
+//                }
+                
+                Text("Next gentle reminder in 1 hour")
+                    .foregroundColor(.gray)
+                    .font(.subheadline)
                 
                 // Quick Add + Remove
                 VStack(spacing: 15) {
                     HStack(spacing: 20) {
-                        QuickAddButton(amount: 250, action: { appVM.waterVM.addWater(amount: 250) })
-                        QuickAddButton(amount: 350, action: { appVM.waterVM.addWater(amount: 350) })
-                        QuickAddButton(amount: 500, action: { appVM.waterVM.addWater(amount: 500) })
+                        QuickAddButton(amount: 250, action: { waterVM.addWater(amount: 250) })
+                        QuickAddButton(amount: 350, action: { waterVM.addWater(amount: 350) })
+                        QuickAddButton(amount: 500, action: { waterVM.addWater(amount: 500) })
                         Button(action: {
-                            isAdding = true
-                            showCustomInput = true
+//                            isAdding = true
+//                            showCustomInput = true
                         }) {
                             Text("+ Custom")
                                 .font(.subheadline)
@@ -87,7 +93,7 @@ struct HomeView: View {
                     
                     HStack {
                         Button(action: {
-                            appVM.waterVM.removeWater(amount: 250)
+                            waterVM.removeWater(amount: 250)
                         }) {
                             Text("Remove 250ml")
                                 .font(.subheadline)
@@ -97,8 +103,8 @@ struct HomeView: View {
                                 .cornerRadius(10)
                         }
                         Button(action: {
-                            isAdding = false
-                            showCustomInput = true
+//                            isAdding = false
+//                            showCustomInput = true
                         }) {
                             Text("- Custom")
                                 .font(.subheadline)
@@ -113,9 +119,22 @@ struct HomeView: View {
                 
 //                HStack {
 //                    Spacer()
-//                    NavigationButton(title: "Home", icon: "house.fill", destination: HomeView().environmentObject(appVM))
+//                    VStack {
+//                        Image(systemName: "house.fill")
+//                            .foregroundColor(.blue)
+//                        Text("Home")
+//                            .font(.caption)
+//                    }
 //                    Spacer()
-//                    NavigationButton(title: "Settings", icon: "gearshape.fill", destination: SettingsView().environmentObject(appVM))
+//                    
+//                    NavigationLink(destination: SettingsView()) {
+//                        VStack {
+//                            Image(systemName: "gearshape.fill")
+//                                .foregroundColor(.gray)
+//                            Text("Settings")
+//                                .font(.caption)
+//                        }
+//                    }
 //                    Spacer()
 //                }
 //                .padding()
@@ -124,10 +143,10 @@ struct HomeView: View {
             }
             
             .padding()
-            .sheet(isPresented: $showCustomInput) {
-                CustomInputView(isAdding: $isAdding, customAmount: $customAmount, showCustomInput: $showCustomInput)
-                    .environmentObject(appVM)
-            }
+//            .sheet(isPresented: $showCustomInput) {
+//                CustomInputView(isAdding: $isAdding, customAmount: $customAmount, showCustomInput: $showCustomInput)
+//                    .environmentObject(appVM)
+//            }
             .navigationBarHidden(true)
         }
         .navigationBarBackButtonHidden()

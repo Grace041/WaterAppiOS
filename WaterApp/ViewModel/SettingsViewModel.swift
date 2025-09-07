@@ -6,48 +6,35 @@
 //
 
 import Foundation
-import SwiftUI
 
 class SettingsViewModel: ObservableObject {
-    @Published var profile = SettingModel(
-        name: "",
-        age: 0,
-        dailyGoal: 2000,
-        notificationsEnabled: true,
-        notificationFrequency: 60, // 1 hour in minutes
-        theme: "System"
-    )
+    @Published var profile = UserProfile()
     
-    func updateGoal(to newGoal: Double) {
-        profile.dailyGoal = newGoal
-        saveData()
+    private let profileKey = "userProfile"
+    
+    init() {
+        loadProfile()
     }
     
-    func toggleNotifications(_ enabled: Bool) {
-        profile.notificationsEnabled = enabled
-        saveData()
-    }
-    
-    func updateFrequency(_ minutes: Int) {
-        profile.notificationFrequency = minutes
-        saveData()
-    }
-    
-    func updateTheme(_ theme: String) {
-        profile.theme = theme
-        saveData()
-    }
-    
-    func saveData() {
+    func saveProfile() {
         if let encoded = try? JSONEncoder().encode(profile) {
-            UserDefaults.standard.set(encoded, forKey: "userProfile")
+            UserDefaults.standard.set(encoded, forKey: profileKey)
         }
     }
     
-    func loadData() {
-        if let data = UserDefaults.standard.data(forKey: "userProfile"),
-           let decoded = try? JSONDecoder().decode(SettingModel.self, from: data) {
+    private func loadProfile() {
+        if let savedData = UserDefaults.standard.data(forKey: profileKey),
+           let decoded = try? JSONDecoder().decode(UserProfile.self, from: savedData) {
             profile = decoded
         }
     }
+}
+
+struct UserProfile: Codable {
+    var name: String = ""
+    var age: Int = 0
+    var notificationsEnabled: Bool = true
+    var notificationFrequency: Int = 30
+    var dailyGoal: Double = 2000
+    var theme: String = "System"
 }

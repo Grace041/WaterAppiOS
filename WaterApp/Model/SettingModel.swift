@@ -12,7 +12,7 @@ struct SettingModel: Codable {
     var age: Int
     var dailyGoal: Double // in ml
     var notificationsEnabled: Bool
-    var notificationFrequency: Int // in minutes
+    var notificationFrequency: Int // in hours
     var theme: String
 }
 

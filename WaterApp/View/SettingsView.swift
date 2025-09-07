@@ -52,9 +52,24 @@ struct SettingsView: View {
                 
 //                HStack {
 //                    Spacer()
-//                    NavigationButton(title: "Home", icon: "house.fill", destination: HomeView())
+//                    NavigationLink(destination: HomeView()) {
+//                        VStack {
+//                            Image(systemName: "house.fill")
+//                                .foregroundColor(.blue)
+//                            Text("Home")
+//                                .font(.caption)
+//                        }
+//                    }
 //                    Spacer()
-//                    NavigationButton(title: "Settings", icon: "gearshape.fill", destination: SettingsView())
+//                    
+//                    NavigationLink(destination: SettingsView()) {
+//                        VStack {
+//                            Image(systemName: "gearshape.fill")
+//                                .foregroundColor(.gray)
+//                            Text("Settings")
+//                                .font(.caption)
+//                        }
+//                    }
 //                    Spacer()
 //                }
 //                .padding()
