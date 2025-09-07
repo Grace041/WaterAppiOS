@@ -14,7 +14,7 @@ struct WaterAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationTab()
                 .environmentObject(appVM)
         }
     }

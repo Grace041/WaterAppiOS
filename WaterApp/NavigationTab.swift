@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  NavigationTab.swift
 //  WaterApp
 //
 //  Created by Grace on 7/9/2025.
@@ -11,7 +11,7 @@ enum Tab {
     case home, settings
 }
 
-struct ContentView: View {
+struct NavigationTab: View {
     @EnvironmentObject var appVM: AppViewModel
     @State private var selectedTab: Tab = .home
     
@@ -35,12 +35,5 @@ struct ContentView: View {
                 }
                 .tag(Tab.settings)
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsView()
-            .environmentObject(AppViewModel())
     }
 }
