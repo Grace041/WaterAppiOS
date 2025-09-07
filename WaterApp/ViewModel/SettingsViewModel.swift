@@ -22,7 +22,7 @@ class SettingsViewModel: ObservableObject {
         }
     }
     
-    private func loadProfile() {
+    func loadProfile() {
         if let savedData = UserDefaults.standard.data(forKey: profileKey),
            let decoded = try? JSONDecoder().decode(UserProfile.self, from: savedData) {
             profile = decoded

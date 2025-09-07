@@ -15,10 +15,7 @@ struct HomeView: View {
     @State private var isAdding: Bool = true
     
     @StateObject private var waterVM = WaterViewModel()
-    
-//    var progress: Double {
-//        appVM.waterVM.progress
-//    }
+    @StateObject private var settingsVM = SettingsViewModel()
     
     var body: some View {
         NavigationView {
@@ -62,15 +59,11 @@ struct HomeView: View {
                 }
                 .frame(width: 220, height: 220)
                 
-//                if appVM.settingsVM.profile.notificationsEnabled {
-//                    Text("Next gentle reminder in \(appVM.settingsVM.profile.notificationFrequency / 60) hours")
-//                        .foregroundColor(.gray)
-//                        .font(.subheadline)
-//                }
-                
-                Text("Next gentle reminder in 1 hour")
-                    .foregroundColor(.gray)
-                    .font(.subheadline)
+                if settingsVM.profile.notificationsEnabled {
+                    Text("Next gentle reminder is within \(settingsVM.profile.notificationFrequency) hours")
+                        .foregroundColor(.gray)
+                        .font(.subheadline)
+                }
                 
                 // Quick Add + Remove
                 VStack(spacing: 15) {
@@ -153,6 +146,9 @@ struct HomeView: View {
             }
 //            }
             .navigationBarHidden(true)
+            .onAppear{
+                settingsVM.loadProfile()
+            }
         }
         .navigationBarBackButtonHidden()
     }
