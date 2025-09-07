@@ -2,7 +2,7 @@
 //  WaterAppApp.swift
 //  WaterApp
 //
-//  Created by Grace on 22/8/2025.
+//  Created by Chi Sum Lau on 22/8/2025.
 //
 
 import SwiftUI
@@ -14,7 +14,7 @@ struct WaterAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            ContentView()
                 .environmentObject(appVM)
         }
     }

@@ -2,7 +2,7 @@
 //  SettingsView.swift
 //  WaterApp
 //
-//  Created by Grace on 22/8/2025.
+//  Created by Chi Sum Lau on 22/8/2025.
 //
 
 import SwiftUI
@@ -11,12 +11,11 @@ struct SettingsView: View {
     //@StateObject private var settingsVM = SettingsViewModel()
     @EnvironmentObject var appVM : AppViewModel
     
-    let themes = ["Light", "Dark", "System"]
     let frequencyOptions = [1, 2, 3, 4, 5]
     
     var body: some View {
-        VStack {
-            NavigationView {
+        NavigationView {
+            VStack {
                 Form {
                     Section(header: Text("Profile")) {
                         TextField("Name", text: $appVM.settingsVM.profile.name)
@@ -38,12 +37,6 @@ struct SettingsView: View {
                         Stepper(value: $appVM.settingsVM.profile.dailyGoal, in: 100...20000, step: 100) {
                             Label("Daily Water Goal: \(Int(appVM.settingsVM.profile.dailyGoal)) ml", systemImage: "drop.fill")
                         }
-                        
-                        Picker(selection: $appVM.settingsVM.profile.theme, label: Label("Theme", systemImage: "paintpalette")) {
-                            ForEach(themes, id: \.self) { theme in
-                                Text(theme)
-                            }
-                        }
                     }
                     
                     Section(header: Text("Account")) {
@@ -56,30 +49,20 @@ struct SettingsView: View {
                     }
                 }
                 .navigationTitle("Settings")
+                
+//                HStack {
+//                    Spacer()
+//                    NavigationButton(title: "Home", icon: "house.fill", destination: HomeView())
+//                    Spacer()
+//                    NavigationButton(title: "Settings", icon: "gearshape.fill", destination: SettingsView())
+//                    Spacer()
+//                }
+//                .padding()
+//                .background(Color(UIColor.systemGray6))
+//                .cornerRadius(20)
             }
-
-            // Bottom Navigation
-            HStack {
-                Spacer()
-                NavigationLink(destination: HomeView()) {
-                    VStack {
-                        Image(systemName: "house.fill")
-                        Text("Home")
-                    }
-                }
-                Spacer()
-                NavigationLink(destination: SettingsView()) {
-                    VStack {
-                        Image(systemName: "gearshape.fill")
-                        Text("Settings")
-                    }
-                }
-                Spacer()
-            }
-            .padding()
-            .background(Color(UIColor.systemGray6))
-            .cornerRadius(20)
         }
+        .navigationBarBackButtonHidden()
     }
 }
 

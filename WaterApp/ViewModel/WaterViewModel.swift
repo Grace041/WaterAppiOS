@@ -2,7 +2,7 @@
 //  WaterViewModel.swift
 //  WaterApp
 //
-//  Created by Grace on 4/9/2025.
+//  Created by Chi Sum Lau on 4/9/2025.
 //
 
 import Foundation
