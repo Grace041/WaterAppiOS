@@ -11,6 +11,8 @@ import SwiftUI
 class WaterViewModel: ObservableObject {
     @Published var currentIntake: Double = 0
     @Published var dailyGoal: Double = 2000
+    @Published var notificationsEnabled: Bool = true
+    @Published var notificationFrequency: Int = 2
     
     var progress: Double {
         guard dailyGoal > 0 else { return 0 }
@@ -20,6 +22,8 @@ class WaterViewModel: ObservableObject {
     private let intakeKey = "currentWaterIntake"
     private let goalKey = "dailyWaterGoal"
     private let lastResetDateKey = "lastResetDate"
+    private let frequencyKey = "notificationFrequency"
+    private let notificationsKey = "notificationsEnabled"
     
     init() {
         loadData()
@@ -36,19 +40,37 @@ class WaterViewModel: ObservableObject {
         saveData()
     }
     
+    func updateDailyGoal(_ newGoal: Double) {
+        dailyGoal = newGoal
+        saveData()
+    }
+   
+    func updateNotificationSettings(enabled: Bool, frequency: Int) {
+        notificationsEnabled = enabled
+        notificationFrequency = frequency
+        saveData()
+    }
+    
     private func saveData() {
         UserDefaults.standard.set(currentIntake, forKey: intakeKey)
         UserDefaults.standard.set(dailyGoal, forKey: goalKey)
         UserDefaults.standard.set(Date(), forKey: lastResetDateKey)
+        UserDefaults.standard.set(notificationsEnabled, forKey: notificationsKey)
+        UserDefaults.standard.set(notificationFrequency, forKey: frequencyKey)
     }
     
     private func loadData() {
         currentIntake = UserDefaults.standard.double(forKey: intakeKey)
         dailyGoal = UserDefaults.standard.double(forKey: goalKey)
+        notificationsEnabled = UserDefaults.standard.bool(forKey: notificationsKey)
+        notificationFrequency = UserDefaults.standard.integer(forKey: frequencyKey)
         
         // Set default goal if none exists
         if dailyGoal == 0 {
             dailyGoal = 2000
+        }
+        if notificationFrequency == 0 {
+            notificationFrequency = 1
         }
     }
     
@@ -66,11 +88,6 @@ class WaterViewModel: ObservableObject {
             // First time using the app
             saveData()
         }
-    }
-    
-    func updateDailyGoal(_ newGoal: Double) {
-        dailyGoal = newGoal
-        saveData()
     }
 }
 

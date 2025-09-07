@@ -28,6 +28,15 @@ class SettingsViewModel: ObservableObject {
             profile = decoded
         }
     }
+    
+    // Sync with WaterViewModel
+    func syncWithWaterViewModel(_ waterVM: WaterViewModel) {
+        waterVM.updateDailyGoal(profile.dailyGoal)
+        waterVM.updateNotificationSettings(
+            enabled: profile.notificationsEnabled,
+            frequency: profile.notificationFrequency
+        )
+    }
 }
 
 struct UserProfile: Codable {

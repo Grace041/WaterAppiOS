@@ -14,8 +14,8 @@ struct HomeView: View {
     @State private var customAmount: String = ""
     @State private var isAdding: Bool = true
     
-    @StateObject private var waterVM = WaterViewModel()
-    @StateObject private var settingsVM = SettingsViewModel()
+    @EnvironmentObject private var waterVM: WaterViewModel
+    //@StateObject private var settingsVM = SettingsViewModel()
     
     var body: some View {
         NavigationView {
@@ -59,8 +59,8 @@ struct HomeView: View {
                 }
                 .frame(width: 220, height: 220)
                 
-                if settingsVM.profile.notificationsEnabled {
-                    Text("Next gentle reminder is within \(settingsVM.profile.notificationFrequency) hours")
+                if waterVM.notificationsEnabled {
+                    Text("Next gentle reminder is within \(waterVM.notificationFrequency) hours")
                         .foregroundColor(.gray)
                         .font(.subheadline)
                 }
@@ -146,9 +146,9 @@ struct HomeView: View {
             }
 //            }
             .navigationBarHidden(true)
-            .onAppear{
-                settingsVM.loadProfile()
-            }
+//            .onAppear{
+//                settingsVM.loadProfile()
+//            }
         }
         .navigationBarBackButtonHidden()
     }
@@ -222,6 +222,6 @@ struct CustomInputView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
-            .environmentObject(AppViewModel())
+            .environmentObject(WaterViewModel())
     }
 }

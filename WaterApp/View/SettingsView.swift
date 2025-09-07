@@ -45,6 +45,10 @@ struct SettingsView: View {
                         Stepper(value: $settingsVM.profile.dailyGoal, in: 100...20000, step: 100) {
                             Label("Daily Water Goal: \(Int(settingsVM.profile.dailyGoal)) ml", systemImage: "drop.fill")
                         }
+                        .onChange(of: settingsVM.profile.dailyGoal) { newValue in
+                            settingsVM.saveProfile()
+                            settingsVM.syncWithWaterViewModel(waterVM)
+                        }
                     }
                     
                     Section(header: Text("Account")) {
