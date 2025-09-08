@@ -17,13 +17,11 @@ struct HomeView: View {
     @State private var quickRemoveAmounts: [Double] = [250]
     
     @EnvironmentObject private var waterVM: WaterViewModel
-    //@StateObject private var settingsVM = SettingsViewModel()
     
     var body: some View {
         NavigationView {
             VStack(spacing: 30) {
                 
-                // Header
                 VStack {
                     Text("Water")
                         .font(.largeTitle)
@@ -31,10 +29,8 @@ struct HomeView: View {
                     Text(Date.now, style: .date)
                         .foregroundColor(.gray)
                 }
-                
                 Spacer()
                 
-                // Progress Circle
                 ZStack {
                     Circle()
                         .stroke(lineWidth: 20)
@@ -72,7 +68,6 @@ struct HomeView: View {
                         .italic()
                 }
                 
-                // Quick Add + Remove
                 VStack(spacing: 15) {
                     HStack(spacing: 20) {
                         ForEach(quickAddAmounts, id: \.self) { amount in
@@ -89,7 +84,6 @@ struct HomeView: View {
                                 .cornerRadius(10)
                         }
                     }
-                    
                     
                     HStack {
                         ForEach(quickRemoveAmounts, id: \.self) { amount in
@@ -121,32 +115,7 @@ struct HomeView: View {
                     }
                     .padding(.top, 10)
                 }
-                
                 Spacer()
-                
-//                HStack {
-//                    Spacer()
-//                    VStack {
-//                        Image(systemName: "house.fill")
-//                            .foregroundColor(.blue)
-//                        Text("Home")
-//                            .font(.caption)
-//                    }
-//                    Spacer()
-//                    
-//                    NavigationLink(destination: SettingsView()) {
-//                        VStack {
-//                            Image(systemName: "gearshape.fill")
-//                                .foregroundColor(.gray)
-//                            Text("Settings")
-//                                .font(.caption)
-//                        }
-//                    }
-//                    Spacer()
-//                }
-//                .padding()
-//                .background(Color(UIColor.systemGray6))
-//                .cornerRadius(20)
             }
             
             .padding()
@@ -156,7 +125,7 @@ struct HomeView: View {
                     customAmount: $customAmount,
                     showCustomInput: $showCustomInput
                 )
-                .environmentObject(waterVM) // Add environmentObject here
+                .environmentObject(waterVM)
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
             }
@@ -181,7 +150,7 @@ struct QuickAddButton: View {
     
     var body: some View {
         Button(action: action) {
-            Text("\(Int(amount))ml")
+            Text("+\(Int(amount))ml")
                 .font(.subheadline)
                 .padding()
                 .frame(width: 70)
@@ -206,7 +175,6 @@ struct QuickRemoveButton: View {
         }
     }
 }
-
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

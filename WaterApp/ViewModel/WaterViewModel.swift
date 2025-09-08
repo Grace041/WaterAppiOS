@@ -52,18 +52,18 @@ class WaterViewModel: ObservableObject {
     }
     
     private func saveData() {
-        UserDefaults.standard.set(currentIntake, forKey: intakeKey)
-        UserDefaults.standard.set(dailyGoal, forKey: goalKey)
-        UserDefaults.standard.set(Date(), forKey: lastResetDateKey)
-        UserDefaults.standard.set(notificationsEnabled, forKey: notificationsKey)
-        UserDefaults.standard.set(notificationFrequency, forKey: frequencyKey)
+        UserDefaults.standard.set(notificationsEnabled, forKey: "notificationsEnabled")
+        UserDefaults.standard.set(notificationFrequency, forKey: "notificationFrequency")
+        UserDefaults.standard.set(currentIntake, forKey: "currentWaterIntake")
+        UserDefaults.standard.set(dailyGoal, forKey: "dailyWaterGoal")
+        UserDefaults.standard.set(Date(), forKey: "lastResetDate")
     }
     
     private func loadData() {
-        currentIntake = UserDefaults.standard.double(forKey: intakeKey)
-        dailyGoal = UserDefaults.standard.double(forKey: goalKey)
-        notificationsEnabled = UserDefaults.standard.bool(forKey: notificationsKey)
-        notificationFrequency = UserDefaults.standard.integer(forKey: frequencyKey)
+        notificationsEnabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
+        notificationFrequency = UserDefaults.standard.integer(forKey: "notificationFrequency")
+        currentIntake = UserDefaults.standard.double(forKey: "currentWaterIntake")
+        dailyGoal = UserDefaults.standard.double(forKey: "dailyWaterGoal")
         
         // Set default goal if none exists
         if dailyGoal == 0 {

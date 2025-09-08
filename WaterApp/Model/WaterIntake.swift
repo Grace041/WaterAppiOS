@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct WaterIntake: Identifiable, Codable {
-    let id = UUID()
+struct WaterIntake: Codable {
+    //let id = UUID()
     let amount: Double // in ml
     let date: Date
 }

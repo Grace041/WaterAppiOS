@@ -28,8 +28,7 @@ class SettingsViewModel: ObservableObject {
             profile = decoded
         }
     }
-    
-    // Sync with WaterViewModel
+
     func syncWithWaterViewModel(_ waterVM: WaterViewModel) {
         waterVM.updateDailyGoal(profile.dailyGoal)
         waterVM.updateNotificationSettings(
@@ -40,10 +39,7 @@ class SettingsViewModel: ObservableObject {
 }
 
 struct UserProfile: Codable {
-    var name: String = ""
-    var age: Int = 0
     var notificationsEnabled: Bool = true
-    var notificationFrequency: Int = 30
+    var notificationFrequency: Int = 2
     var dailyGoal: Double = 2000
-    var theme: String = "System"
 }

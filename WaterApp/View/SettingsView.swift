@@ -19,7 +19,7 @@ struct SettingsView: View {
                 Form {
                     HStack {
                         Image(systemName: "person.circle.fill")
-                            .font(.system(size: 50))
+                            .font(.system(size: 70))
                             .foregroundColor(.gray)
                                             
                         VStack(alignment: .leading, spacing: 4) {
@@ -35,7 +35,8 @@ struct SettingsView: View {
                                             
                     Spacer()
                     }
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 6)
+                    
                     Section(header: Text("Preferences")) {
                         Toggle(isOn: $settingsVM.profile.notificationsEnabled) {
                             HStack {
@@ -44,6 +45,13 @@ struct SettingsView: View {
                                     .frame(width: 20)
                                 Text("Enable Notifications")
                             }
+                        }
+                        .onChange(of: settingsVM.profile.notificationsEnabled) {
+                            waterVM.updateNotificationSettings(
+                                enabled: settingsVM.profile.notificationsEnabled,
+                                frequency: settingsVM.profile.notificationFrequency
+                            )
+                            settingsVM.saveProfile()
                         }
                         
                         if settingsVM.profile.notificationsEnabled {
@@ -61,8 +69,11 @@ struct SettingsView: View {
                                 .pickerStyle(MenuPickerStyle())
                             }
                             .onChange(of: settingsVM.profile.notificationFrequency) {
+                                waterVM.updateNotificationSettings(
+                                    enabled: settingsVM.profile.notificationsEnabled,
+                                    frequency: settingsVM.profile.notificationFrequency
+                                )
                                 settingsVM.saveProfile()
-                                settingsVM.syncWithWaterViewModel(waterVM)
                             }
                         }
                         
@@ -82,7 +93,7 @@ struct SettingsView: View {
                     
                     Section(header: Text("Account")) {
                         Button(action: {
-                            // TODO: Log out
+                            // Log out
                         }) {
                             Label("Log Out", systemImage: "rectangle.portrait.and.arrow.right")
                                 .foregroundColor(.red)
@@ -90,40 +101,15 @@ struct SettingsView: View {
                     }
                 }
                 .navigationTitle("Settings")
-                
-//                HStack {
-//                    Spacer()
-//                    NavigationLink(destination: HomeView()) {
-//                        VStack {
-//                            Image(systemName: "house.fill")
-//                                .foregroundColor(.blue)
-//                            Text("Home")
-//                                .font(.caption)
-//                        }
-//                    }
-//                    Spacer()
-//                    
-//                    NavigationLink(destination: SettingsView()) {
-//                        VStack {
-//                            Image(systemName: "gearshape.fill")
-//                                .foregroundColor(.gray)
-//                            Text("Settings")
-//                                .font(.caption)
-//                        }
-//                    }
-//                    Spacer()
-//                }
-//                .padding()
-//                .background(Color(UIColor.systemGray6))
-//                .cornerRadius(20)
+            }
+            .onAppear {
+                settingsVM.profile.dailyGoal = waterVM.dailyGoal
+                settingsVM.profile.notificationsEnabled = waterVM.notificationsEnabled
+                settingsVM.profile.notificationFrequency = waterVM.notificationFrequency
             }
         }
         .navigationBarBackButtonHidden()
-        .onAppear {
-            settingsVM.profile.dailyGoal = waterVM.dailyGoal
-            settingsVM.profile.notificationsEnabled = waterVM.notificationsEnabled
-            settingsVM.profile.notificationFrequency = waterVM.notificationFrequency
-        }
+        
     }
 }
 
