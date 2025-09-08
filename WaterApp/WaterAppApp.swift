@@ -10,12 +10,12 @@ import SwiftUI
 @main
 struct WaterAppApp: App {
     
-    @StateObject private var appVM = AppViewModel()
+    @StateObject private var waterVM = WaterViewModel()
     
     var body: some Scene {
         WindowGroup {
             NavigationTab()
-                .environmentObject(appVM)
+                .environmentObject(waterVM)
         }
     }
 }

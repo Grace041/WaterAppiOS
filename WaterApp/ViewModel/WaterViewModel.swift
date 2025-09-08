@@ -80,12 +80,10 @@ class WaterViewModel: ObservableObject {
         
         if let lastResetDate = UserDefaults.standard.object(forKey: lastResetDateKey) as? Date {
             if !calendar.isDate(now, inSameDayAs: lastResetDate) {
-                // It's a new day, reset intake
                 currentIntake = 0
                 saveData()
             }
         } else {
-            // First time using the app
             saveData()
         }
     }

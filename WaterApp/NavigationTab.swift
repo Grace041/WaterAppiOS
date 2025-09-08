@@ -12,7 +12,7 @@ enum Tab {
 }
 
 struct NavigationTab: View {
-    @EnvironmentObject var appVM: AppViewModel
+    @EnvironmentObject var waterVM: WaterViewModel
     @State private var selectedTab: Tab = .home
     
     var body: some View {
@@ -22,12 +22,6 @@ struct NavigationTab: View {
                     Label("Home", systemImage: "house.fill")
                 }
                 .tag(Tab.home)
-            
-//            InsightsView()
-//                .tabItem {
-//                    Label("Insights", systemImage: "chart.bar.fill")
-//                }
-//                .tag(Tab.insights)
             
             SettingsView()
                 .tabItem {

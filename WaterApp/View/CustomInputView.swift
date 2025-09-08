@@ -11,7 +11,7 @@ struct CustomInputView: View {
     @Binding var isAdding: Bool
     @Binding var customAmount: String
     @Binding var showCustomInput: Bool
-    @ObservedObject var waterVM: WaterViewModel
+    @EnvironmentObject var waterVM: WaterViewModel
     
     var body: some View {
         VStack(spacing: 20) {

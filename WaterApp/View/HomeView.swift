@@ -12,6 +12,9 @@ struct HomeView: View {
     @State private var showCustomInput = false
     @State private var customAmount: String = ""
     @State private var isAdding: Bool = true
+    @State private var showEditQuickAdd = false
+    @State private var quickAddAmounts: [Double] = [250, 350, 500]
+    @State private var quickRemoveAmounts: [Double] = [250]
     
     @EnvironmentObject private var waterVM: WaterViewModel
     //@StateObject private var settingsVM = SettingsViewModel()
@@ -62,14 +65,19 @@ struct HomeView: View {
                     Text("Next gentle reminder is within \(waterVM.notificationFrequency) hours")
                         .foregroundColor(.gray)
                         .font(.subheadline)
+                } else {
+                    Text("Notifications disabled")
+                        .foregroundColor(.gray.opacity(0.6))
+                        .font(.subheadline)
+                        .italic()
                 }
                 
                 // Quick Add + Remove
                 VStack(spacing: 15) {
                     HStack(spacing: 20) {
-                        QuickAddButton(amount: 250, action: { waterVM.addWater(amount: 250) })
-                        QuickAddButton(amount: 350, action: { waterVM.addWater(amount: 350) })
-                        QuickAddButton(amount: 500, action: { waterVM.addWater(amount: 500) })
+                        ForEach(quickAddAmounts, id: \.self) { amount in
+                            QuickAddButton(amount: amount, action: { waterVM.addWater(amount: amount) })
+                        }
                         Button(action: {
                             isAdding = true
                             showCustomInput = true
@@ -84,15 +92,8 @@ struct HomeView: View {
                     
                     
                     HStack {
-                        Button(action: {
-                            waterVM.removeWater(amount: 250)
-                        }) {
-                            Text("-250 ml")
-                                .font(.subheadline)
-                                .padding()
-                                .frame(width: 150)
-                                .background(Color.red.opacity(0.2))
-                                .cornerRadius(10)
+                        ForEach(quickRemoveAmounts, id: \.self) { amount in
+                            QuickRemoveButton(amount: amount, action: { waterVM.removeWater(amount: amount) })
                         }
                         Button(action: {
                             isAdding = false
@@ -105,33 +106,47 @@ struct HomeView: View {
                                 .cornerRadius(10)
                         }
                     }
+                    Button(action: {
+                        showEditQuickAdd = true
+                    }) {
+                        HStack {
+                            Image(systemName: "pencil")
+                                .font(.system(size: 14))
+                            Text("Edit Buttons")
+                                .font(.subheadline)
+                        }
+                        .padding(8)
+                        .background(Color.blue.opacity(0.1))
+                        .cornerRadius(8)
+                    }
+                    .padding(.top, 10)
                 }
                 
                 Spacer()
                 
-                HStack {
-                    Spacer()
-                    VStack {
-                        Image(systemName: "house.fill")
-                            .foregroundColor(.blue)
-                        Text("Home")
-                            .font(.caption)
-                    }
-                    Spacer()
-                    
-                    NavigationLink(destination: SettingsView()) {
-                        VStack {
-                            Image(systemName: "gearshape.fill")
-                                .foregroundColor(.gray)
-                            Text("Settings")
-                                .font(.caption)
-                        }
-                    }
-                    Spacer()
-                }
-                .padding()
-                .background(Color(UIColor.systemGray6))
-                .cornerRadius(20)
+//                HStack {
+//                    Spacer()
+//                    VStack {
+//                        Image(systemName: "house.fill")
+//                            .foregroundColor(.blue)
+//                        Text("Home")
+//                            .font(.caption)
+//                    }
+//                    Spacer()
+//                    
+//                    NavigationLink(destination: SettingsView()) {
+//                        VStack {
+//                            Image(systemName: "gearshape.fill")
+//                                .foregroundColor(.gray)
+//                            Text("Settings")
+//                                .font(.caption)
+//                        }
+//                    }
+//                    Spacer()
+//                }
+//                .padding()
+//                .background(Color(UIColor.systemGray6))
+//                .cornerRadius(20)
             }
             
             .padding()
@@ -139,9 +154,20 @@ struct HomeView: View {
                 CustomInputView(
                     isAdding: $isAdding,
                     customAmount: $customAmount,
-                    showCustomInput: $showCustomInput,
-                    waterVM: waterVM
+                    showCustomInput: $showCustomInput
                 )
+                .environmentObject(waterVM) // Add environmentObject here
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+            }
+            .sheet(isPresented: $showEditQuickAdd) {
+                EditQuickButtonsView(
+                    quickAddAmounts: $quickAddAmounts,
+                    quickRemoveAmounts: $quickRemoveAmounts,
+                    isShowing: $showEditQuickAdd
+                )
+                .presentationDetents([.height(550)])
+                .presentationDragIndicator(.visible)
             }
             .navigationBarHidden(true)
         }
@@ -160,6 +186,22 @@ struct QuickAddButton: View {
                 .padding()
                 .frame(width: 70)
                 .background(Color.blue.opacity(0.2))
+                .cornerRadius(10)
+        }
+    }
+}
+
+struct QuickRemoveButton: View {
+    let amount: Double
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text("-\(Int(amount))ml")
+                .font(.subheadline)
+                .padding()
+                .frame(width: 70)
+                .background(Color.red.opacity(0.2))
                 .cornerRadius(10)
         }
     }

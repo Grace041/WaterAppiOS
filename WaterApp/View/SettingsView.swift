@@ -35,30 +35,46 @@ struct SettingsView: View {
                                             
                     Spacer()
                     }
-                                        .padding(.vertical, 12)
+                    .padding(.vertical, 12)
                     Section(header: Text("Preferences")) {
                         Toggle(isOn: $settingsVM.profile.notificationsEnabled) {
-                            Label("Enable Notifications", systemImage: "bell")
-                        }
-                        .onChange(of: settingsVM.profile.notificationsEnabled) { _ in
-                            settingsVM.saveProfile()
+                            HStack {
+                                Image(systemName: "bell")
+                                    .foregroundColor(.yellow)
+                                    .frame(width: 20)
+                                Text("Enable Notifications")
+                            }
                         }
                         
                         if settingsVM.profile.notificationsEnabled {
-                            Picker("Notification Frequency", selection: $settingsVM.profile.notificationFrequency) {
-                                ForEach(frequencyOptions, id: \.self) { freq in
-                                    Text("\(freq) hours")
+                            HStack {
+                                Image(systemName: "clock")
+                                    .foregroundColor(.black)
+                                    .frame(width: 20)
+                                Text("Notification Frequency")
+                                Spacer()
+                                Picker("", selection: $settingsVM.profile.notificationFrequency) {
+                                    ForEach(frequencyOptions, id: \.self) { freq in
+                                        Text("\(freq) hour")
+                                    }
                                 }
+                                .pickerStyle(MenuPickerStyle())
                             }
-                            .onChange(of: settingsVM.profile.notificationFrequency) { _ in
+                            .onChange(of: settingsVM.profile.notificationFrequency) {
                                 settingsVM.saveProfile()
+                                settingsVM.syncWithWaterViewModel(waterVM)
                             }
                         }
                         
-                        Stepper(value: $settingsVM.profile.dailyGoal, in: 100...20000, step: 100) {
-                            Label("Daily Water Goal: \(Int(settingsVM.profile.dailyGoal)) ml", systemImage: "drop.fill")
+                        HStack {
+                            Image(systemName: "drop.fill")
+                                .foregroundColor(.blue)
+                                .frame(width: 20)
+                            Stepper(value: $settingsVM.profile.dailyGoal, in: 100...20000, step: 100) {
+                                Text("Daily Goal: \(Int(settingsVM.profile.dailyGoal)) ml")
+                            }
                         }
-                        .onChange(of: settingsVM.profile.dailyGoal) { newValue in
+                        .onChange(of: settingsVM.profile.dailyGoal) {
                             settingsVM.saveProfile()
                             settingsVM.syncWithWaterViewModel(waterVM)
                         }
@@ -75,34 +91,39 @@ struct SettingsView: View {
                 }
                 .navigationTitle("Settings")
                 
-                HStack {
-                    Spacer()
-                    NavigationLink(destination: HomeView()) {
-                        VStack {
-                            Image(systemName: "house.fill")
-                                .foregroundColor(.blue)
-                            Text("Home")
-                                .font(.caption)
-                        }
-                    }
-                    Spacer()
-                    
-                    NavigationLink(destination: SettingsView()) {
-                        VStack {
-                            Image(systemName: "gearshape.fill")
-                                .foregroundColor(.gray)
-                            Text("Settings")
-                                .font(.caption)
-                        }
-                    }
-                    Spacer()
-                }
-                .padding()
-                .background(Color(UIColor.systemGray6))
-                .cornerRadius(20)
+//                HStack {
+//                    Spacer()
+//                    NavigationLink(destination: HomeView()) {
+//                        VStack {
+//                            Image(systemName: "house.fill")
+//                                .foregroundColor(.blue)
+//                            Text("Home")
+//                                .font(.caption)
+//                        }
+//                    }
+//                    Spacer()
+//                    
+//                    NavigationLink(destination: SettingsView()) {
+//                        VStack {
+//                            Image(systemName: "gearshape.fill")
+//                                .foregroundColor(.gray)
+//                            Text("Settings")
+//                                .font(.caption)
+//                        }
+//                    }
+//                    Spacer()
+//                }
+//                .padding()
+//                .background(Color(UIColor.systemGray6))
+//                .cornerRadius(20)
             }
         }
         .navigationBarBackButtonHidden()
+        .onAppear {
+            settingsVM.profile.dailyGoal = waterVM.dailyGoal
+            settingsVM.profile.notificationsEnabled = waterVM.notificationsEnabled
+            settingsVM.profile.notificationFrequency = waterVM.notificationFrequency
+        }
     }
 }
 
